@@ -97,6 +97,7 @@ public class Savings extends Account
      */
     @Override
     public String printOutput() {
+        if (this instanceof MoneyMarket) ((MoneyMarket) this).recheckLoyalStatus();
         if (isLoyal)
             return super.printOutput() + "::is loyal";
         else
