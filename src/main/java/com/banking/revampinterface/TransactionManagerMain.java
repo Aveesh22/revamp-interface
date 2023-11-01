@@ -7,6 +7,10 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 
+/**
+ * This class launches the Transaction Manager GUI
+ * @author Aveesh Patel, Patryk Dziedzic
+ */
 public class TransactionManagerMain extends Application
 {
     @Override

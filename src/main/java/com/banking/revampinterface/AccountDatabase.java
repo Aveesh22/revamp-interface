@@ -217,30 +217,36 @@ public class AccountDatabase
     /**
      * Prints the accounts in the AccountDatabase sorted by account type and profile
      */
-    public void printSorted()
+    public String printSorted()
     {
         Quicksort.sort(accounts);
+        StringBuilder result = new StringBuilder();
         for (int i = 0; i < numAcct; i++) {
-            System.out.println(accounts[i].printOutput());
+            result.append(accounts[i].printOutput());
+            result.append("\n");
         }
+        return result.toString();
     }
 
     /**
      * Prints the accounts in the AccountDatabase with fees and interests
      */
-    public void printFeesAndInterests() //calculate interests/fees
+    public String printFeesAndInterests() //calculate interests/fees
     {
         Quicksort.sort(accounts);
+        StringBuilder result = new StringBuilder();
         for (int i = 0; i < numAcct; i++) {
-            System.out.println(accounts[i].printOutput_PI());
+            result.append(accounts[i].printOutput_PI());
+            result.append("\n");
         }
+        return result.toString();
     }
 
     /**
      * Prints the updated balances of the Accounts in the AccountDatabase
      * with the inclusion of interests and fees
      */
-    public void printUpdatedBalances() //apply the interests/fees
+    public String printUpdatedBalances() //apply the interests/fees
     {
         for (Account a : accounts) {
             if (a != null) {
@@ -252,6 +258,6 @@ public class AccountDatabase
                     ((MoneyMarket) a).setWithdrawal(0);
             }
         }
-        printSorted();
+        return printSorted();
     }
 }
