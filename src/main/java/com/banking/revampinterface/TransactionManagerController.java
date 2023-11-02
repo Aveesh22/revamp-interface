@@ -171,21 +171,8 @@ public class TransactionManagerController
             double balance = Double.parseDouble(initBal_OpenClose.toString());
             Account acct;
 
-            if (acctIsValid(cmd, dob, balance)) {
-                acct = createAccount(cmd, holder, balance);
-                if (acct != null) {
-                    if (acct instanceof Checking) {
-                        if (database.contains((Checking) acct, true))
-                            System.out.println(acct + " is already in the database.");
-                        else if (database.open(acct))
-                            System.out.println(acct + " opened.");
-                    }
-                    else if (database.contains(acct))
-                        System.out.println(acct + " is already in the database.");
-                    else if (database.open(acct))
-                        System.out.println(acct + " opened.");
-                }
-            }
+
+            //open an account
         }
         catch (NullPointerException e) {
             System.out.println("Missing data for opening an account.");
