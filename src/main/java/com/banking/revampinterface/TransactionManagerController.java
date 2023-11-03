@@ -2,9 +2,7 @@ package com.banking.revampinterface;
 
 import javafx.event.Event;
 import javafx.fxml.FXML;
-import javafx.scene.control.DatePicker;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 
 /**
  * This class defines the Controller for the Transaction Manager
@@ -22,6 +20,25 @@ public class TransactionManagerController
     private DatePicker dob_OpenClose;
     @FXML
     private TextField initBal_OpenClose;
+
+    @FXML
+    private RadioButton campus_NB;
+    @FXML
+    private RadioButton campus_Newark;
+    @FXML
+    private RadioButton campus_Camden;
+
+    @FXML
+    private RadioButton acct_Checking;
+    @FXML
+    private RadioButton acct_CollegeChecking;
+    @FXML
+    private RadioButton acct_Savings;
+    @FXML
+    private RadioButton acct_MoneyMarket;
+
+    @FXML
+    private ToggleGroup campus;
 
     private static final int MIN_BALANCE_FOR_NO_FEE_IN_MONEY_MARKET = 2000;
     private static final int OF_AGE = 16;
@@ -181,4 +198,24 @@ public class TransactionManagerController
             System.out.println("Not a valid amount.");
         }
     }
+
+    public void initialize()
+    {
+        /*campus_NB.setDisable(true);
+        campus_Newark.setDisable(true);
+        campus_Camden.setDisable(true);
+
+        campus.selectedToggleProperty().addListener((observable, oldToggle, newToggle) -> {
+            if (newToggle == acct_CollegeChecking) {
+                campus_NB.setDisable(false);
+                campus_Newark.setDisable(false);
+                campus_Camden.setDisable(false);
+            } else {
+                campus_NB.setDisable(true);
+                campus_Newark.setDisable(true);
+                campus_Camden.setDisable(true);
+            }
+        });*/
+    }
+
 }
