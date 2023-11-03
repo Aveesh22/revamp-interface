@@ -23,7 +23,7 @@ public class TransactionManagerController
     @FXML
     private TextField initBal_OC;
     @FXML
-    private CheckBox isLoyal;
+    private CheckBox isLoyalCheck;
 
     @FXML
     private ToggleGroup campus;
@@ -109,13 +109,66 @@ public class TransactionManagerController
                 else
                     outputText.setText("Invalid campus code.");
             } else if (acct_Savings_OC.isSelected())
-                acct = new Savings(holder, balance, isLoyal.isSelected());
+                acct = new Savings(holder, balance, isLoyalCheck.isSelected());
             else if (acct_MoneyMarket_OC.isSelected()) {
                 if (balance < MIN_BALANCE_FOR_NO_FEE_IN_MONEY_MARKET) {
                     outputText.setText("Minimum of $2000 to open a Money Market account.");
                 } else
                     acct = new MoneyMarket(holder, balance);
             } else
+                outputText.setText("Invalid account type.");
+        }
+        return acct;
+    }
+
+    /**
+     * Create an Account object with a Profile and default values
+     * @return the instantiated Account object
+     */
+    private Account createAccount_Close()
+    {
+        Account acct = null;
+        Date dob = new Date(dob_OC.getValue().format(DateTimeFormatter.ofPattern(dateFormat)));
+        Profile holder = new Profile(fname_OC.getText(), lname_OC.getText(), dob);
+
+        if (acct_Checking_OC.isSelected())
+            acct = new Checking(holder);
+        else if (acct_CollegeChecking_OC.isSelected())
+            acct = new CollegeChecking(holder);
+        else if (acct_Savings_OC.isSelected())
+            acct = new Savings(holder);
+        else if (acct_MoneyMarket_OC.isSelected())
+            acct = new MoneyMarket(holder);
+        else
+            outputText.setText("Invalid account type.");
+        return acct;
+    }
+
+    /**
+     * Create an Account object with the GUI parameters
+     * @return the instantiated Account object
+     */
+    private Account createAccount_Deposit()
+    {
+        Account acct = null;
+        Date dob = new Date(dob_OC.getValue().format(DateTimeFormatter.ofPattern(dateFormat)));
+        Profile holder = new Profile(fname_OC.getText(), lname_OC.getText(), dob);
+        double balance = Double.parseDouble(initBal_OC.getText());
+
+        if(isFuture(dob))
+            outputText.setText("DOB invalid: " + dob + " cannot be today or a future day.");
+        else if(!dob.isValid())
+            outputText.setText("DOB invalid: " + dob + " not a valid calendar date!");
+        else {
+            if (acct_Checking_OC.isSelected())
+                acct = new Checking(holder, balance);
+            else if (acct_CollegeChecking_OC.isSelected())
+                acct = new CollegeChecking(holder, balance);
+            else if (acct_Savings_OC.isSelected())
+                acct = new Savings(holder, balance);
+            else if (acct_MoneyMarket_OC.isSelected())
+                acct = new MoneyMarket(holder, balance);
+            else
                 outputText.setText("Invalid account type.");
         }
         return acct;
@@ -186,9 +239,12 @@ public class TransactionManagerController
             return today.getYear() - dob.getYear() < OVER_COLLEGE_AGE;
     }
 
+
+
+
     /**
      * Opens an account with the desired account type.
-     * @param event The current input line as a String array of tokens
+     * @param event The click event
      */
     @FXML
     protected void onOpenButtonClick(Event event) {
@@ -218,24 +274,112 @@ public class TransactionManagerController
         }
     }
 
+    /**
+     * Close an existing account and remove it from the database.
+     * @param event The click event
+     */
+    @FXML
+    protected void onCloseButtonClick(Event event) {
+        try {
+            Account acct = createAccount_Close();
+            if (acct == null) throw new NullPointerException();
+            if (!database.contains(acct))
+                outputText.setText(acct + " is not in the database.");
+            else {
+                if (database.close(acct))
+                    outputText.setText(acct + " has been closed.");
+            }
+        }
+        catch (NullPointerException e) {
+            outputText.setText(outputText.getText() + "\n" +
+                    "Missing data for opening an account or account is not valid.");
+        }
+        catch (ArrayIndexOutOfBoundsException e) {
+            outputText.setText("ArrayIndexOutOfBoundsException thrown.");
+        }
+        catch (NumberFormatException e) {
+            outputText.setText(outputText.getText() + "\n" + "Not a valid amount.");
+        }
+    }
+
+    /**
+     * Clear the GUI fields
+     * @param event The click event
+     */
+    @FXML
+    protected void onClearButtonClick(Event event) {
+        fname_OC.setText("");
+        lname_OC.setText("");
+        dob_OC.setValue(null);
+        isLoyalCheck.setSelected(false);
+        if (accounts_OC.getSelectedToggle() != null)
+            accounts_OC.getSelectedToggle().setSelected(false);
+        if (campus.getSelectedToggle() != null)
+            campus.getSelectedToggle().setSelected(false);
+        isLoyalCheck.setDisable(true);
+        campus_NB.setDisable(true);
+        campus_Newark.setDisable(true);
+        campus_Camden.setDisable(true);
+        initBal_OC.setText("");
+    }
+
+    /**
+     * Print All Accounts
+     * @param event The click event
+     */
+    @FXML
+    protected void onPButtonClick(Event event) {
+        outputText.setText("*Accounts sorted by account type and profile.\n" +
+                database.printSorted() +
+                "*end of list.");
+    }
+
+    /**
+     * Print Interests and Fees
+     * @param event The click event
+     */
+    @FXML
+    protected void onPIButtonClick(Event event) {
+        outputText.setText("*list of accounts with fee and monthly interest\n" +
+                database.printFeesAndInterests() +
+                "*end of list.");
+    }
+
+    /**
+     * Update Accounts with Interests and Fees
+     * @param event The click event
+     */
+    @FXML
+    protected void onUBButtonClick(Event event) {
+        outputText.setText("*list of accounts with fees and interests applied.\n" +
+                database.printUpdatedBalances() +
+                "*end of list.");
+    }
+
     public void initialize()
     {
-        /*
+        isLoyalCheck.setDisable(true);
         campus_NB.setDisable(true);
         campus_Newark.setDisable(true);
         campus_Camden.setDisable(true);
 
-        campus.selectedToggleProperty().addListener((observable, oldToggle, newToggle) -> {
-            if (newToggle == acct_CollegeChecking_OC) {
-                campus_NB.setDisable(false);
-                campus_Newark.setDisable(false);
-                campus_Camden.setDisable(false);
-            } else {
-                campus_NB.setDisable(true);
-                campus_Newark.setDisable(true);
-                campus_Camden.setDisable(true);
+        accounts_OC.selectedToggleProperty().addListener((observable, oldToggle, newToggle) -> {
+            if (newToggle != null) {
+                if (newToggle.equals(acct_Checking_OC) || newToggle.equals(acct_CollegeChecking_OC)) {
+                    isLoyalCheck.setDisable(true);
+                    if (newToggle.equals(acct_CollegeChecking_OC)) {
+                        campus_NB.setDisable(false);
+                        campus_Newark.setDisable(false);
+                        campus_Camden.setDisable(false);
+                    }
+                } else {
+                    isLoyalCheck.setDisable(false);
+                    campus_NB.setDisable(true);
+                    campus_Newark.setDisable(true);
+                    campus_Camden.setDisable(true);
+                }
             }
-        });*/
+        });
     }
 
 }

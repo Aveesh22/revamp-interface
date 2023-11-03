@@ -81,13 +81,13 @@
                                           <Insets right="5.0" />
                                        </HBox.margin>
                                     </Button>
-                                    <Button mnemonicParsing="false" prefHeight="26.0" prefWidth="126.0" text="Close">
+                                    <Button fx:id="closeButton" mnemonicParsing="false" onAction="#onCloseButtonClick" prefHeight="26.0" prefWidth="126.0" text="Close">
                                        <HBox.margin>
                                           <Insets left="5.0" />
                                        </HBox.margin></Button>
                                  </children>
                               </HBox>
-                              <Button mnemonicParsing="false" prefHeight="26.0" prefWidth="75.0" text="Clear" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="6" />
+                              <Button fx:id="clearBtn" mnemonicParsing="false" onAction="#onClearButtonClick" prefHeight="26.0" prefWidth="75.0" text="Clear" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="6" />
                               <GridPane prefHeight="73.0" prefWidth="46.0" GridPane.columnIndex="2" GridPane.rowIndex="4">
                                 <columnConstraints>
                                     <ColumnConstraints halignment="LEFT" hgrow="SOMETIMES" maxWidth="53.0" minWidth="10.0" prefWidth="28.0" />
@@ -107,7 +107,7 @@
                                     <RadioButton fx:id="campus_Camden" mnemonicParsing="false" text="Camden" toggleGroup="$campus" GridPane.columnIndex="1" GridPane.rowIndex="2" />
                                  </children>
                               </GridPane>
-                              <CheckBox fx:id="isLoyal" mnemonicParsing="false" prefHeight="18.0" prefWidth="120.0" text="Loyal Customer" GridPane.columnIndex="2" GridPane.halignment="RIGHT" GridPane.rowIndex="2">
+                              <CheckBox fx:id="isLoyalCheck" mnemonicParsing="false" prefHeight="18.0" prefWidth="120.0" text="Loyal Customer" GridPane.columnIndex="2" GridPane.halignment="RIGHT" GridPane.rowIndex="2">
                                  <GridPane.margin>
                                     <Insets left="10.0" />
                                  </GridPane.margin></CheckBox>
@@ -207,10 +207,10 @@
                             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                           </rowConstraints>
                            <children>
-                              <Button mnemonicParsing="false" prefHeight="23.0" prefWidth="175.0" text="Print All Accounts" GridPane.halignment="CENTER" />
+                              <Button mnemonicParsing="false" onAction="#onPButtonClick" prefHeight="23.0" prefWidth="175.0" text="Print All Accounts" GridPane.halignment="CENTER" />
                               <Button mnemonicParsing="false" prefHeight="23.0" prefWidth="175.0" text="Load Accounts From File" GridPane.columnIndex="1" GridPane.halignment="CENTER" />
-                              <Button mnemonicParsing="false" prefHeight="26.0" prefWidth="175.0" text="Print Interests and Fees" GridPane.halignment="CENTER" GridPane.rowIndex="1" />
-                              <Button mnemonicParsing="false" prefHeight="48.0" prefWidth="175.0" text="Update Accounts with Interests and Fees" textAlignment="CENTER" wrapText="true" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="1" />
+                              <Button mnemonicParsing="false" onAction="#onPIButtonClick" prefHeight="26.0" prefWidth="175.0" text="Print Interests and Fees" GridPane.halignment="CENTER" GridPane.rowIndex="1" />
+                              <Button mnemonicParsing="false" onAction="#onUBButtonClick" prefHeight="48.0" prefWidth="175.0" text="Update Accounts with Interests and Fees" textAlignment="CENTER" wrapText="true" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="1" />
                            </children>
                         </GridPane>
                      </children></AnchorPane>
