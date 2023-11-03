@@ -4,6 +4,8 @@ import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 
+import java.time.format.DateTimeFormatter;
+
 /**
  * This class defines the Controller for the Transaction Manager
  * @author Aveesh Patel, Patryk Dziedzic
@@ -11,16 +13,20 @@ import javafx.scene.control.*;
 public class TransactionManagerController
 {
     @FXML
-    private Label welcomeText;
+    private TextArea outputText;
     @FXML
-    private TextField fname_OpenClose;
+    private TextField fname_OC;
     @FXML
-    private TextField lname_OpenClose;
+    private TextField lname_OC;
     @FXML
-    private DatePicker dob_OpenClose;
+    private DatePicker dob_OC;
     @FXML
-    private TextField initBal_OpenClose;
+    private TextField initBal_OC;
+    @FXML
+    private CheckBox isLoyal;
 
+    @FXML
+    private ToggleGroup campus;
     @FXML
     private RadioButton campus_NB;
     @FXML
@@ -29,41 +35,52 @@ public class TransactionManagerController
     private RadioButton campus_Camden;
 
     @FXML
-    private RadioButton acct_Checking;
+    private ToggleGroup accounts_OC;
     @FXML
-    private RadioButton acct_CollegeChecking;
+    private RadioButton acct_Checking_OC;
     @FXML
-    private RadioButton acct_Savings;
+    private RadioButton acct_CollegeChecking_OC;
     @FXML
-    private RadioButton acct_MoneyMarket;
+    private RadioButton acct_Savings_OC;
+    @FXML
+    private RadioButton acct_MoneyMarket_OC;
 
     @FXML
-    private ToggleGroup campus;
+    private ToggleGroup accounts_DW;
+    @FXML
+    private RadioButton acct_Checking_DW;
+    @FXML
+    private RadioButton acct_CollegeChecking_DW;
+    @FXML
+    private RadioButton acct_Savings_DW;
+    @FXML
+    private RadioButton acct_MoneyMarket_DW;
+
 
     private static final int MIN_BALANCE_FOR_NO_FEE_IN_MONEY_MARKET = 2000;
     private static final int OF_AGE = 16;
     private static final int OVER_COLLEGE_AGE = 24;
+    private static final String dateFormat = "MM/dd/yyyy";
     private AccountDatabase database = new AccountDatabase();
 
 
     /**
      * Check if the account is valid
-     * @param cmd The current input line as a String array of tokens
      * @param dob the date of birth of the Profile holder
      * @param balance the balance of the account
      * @return true or false dependent on if the account is valid or not
      */
-    private boolean acctIsValid(String[] cmd, Date dob, double balance) {
+    private boolean acctIsValid(Date dob, double balance) {
         if(isFuture(dob))
-            System.out.println("DOB invalid: " + dob + " cannot be today or a future day.");
+            outputText.setText("DOB invalid: " + dob + " cannot be today or a future day.");
         else if(!dob.isValid())
-            System.out.println("DOB invalid: " + dob + " not a valid calendar date!");
+            outputText.setText("DOB invalid: " + dob + " not a valid calendar date!");
         else if(!isOfAge(dob))
-            System.out.println("DOB invalid: " + dob + " under 16.");
-        else if(cmd[Command.ACCT.getIndex()].equals("CC") && !isOfAge_College(dob))
-            System.out.println("DOB invalid: " + dob + " over 24.");
+            outputText.setText("DOB invalid: " + dob + " under 16.");
+        else if(acct_CollegeChecking_OC.isSelected() && !isOfAge_College(dob))
+            outputText.setText("DOB invalid: " + dob + " over 24.");
         else if(balance <= 0)
-            System.out.println("Initial deposit cannot be 0 or negative.");
+            outputText.setText("Initial deposit cannot be 0 or negative.");
         else
             return true;
         return false;
@@ -71,42 +88,35 @@ public class TransactionManagerController
 
     /**
      * Create an Account object with the command line parameters
-     * @param cmd the command line parameters
-     * @param holder the Profile holder for the Account
-     * @param balance the balance for the Account
      * @return the instantiated Account object
      */
-    private Account createAccount(String[] cmd, Profile holder, double balance)
-    {
+    private Account createAccount() {
         Account acct = null;
-        switch (cmd[Command.ACCT.getIndex()]) {
-            case "C":
+        Date dob = new Date(dob_OC.getValue().format(DateTimeFormatter.ofPattern(dateFormat)));
+        Profile holder = new Profile(fname_OC.getText(), lname_OC.getText(), dob);
+        double balance = Double.parseDouble(initBal_OC.getText());
+
+        if (acctIsValid(dob, balance)) {
+            if (acct_Checking_OC.isSelected())
                 acct = new Checking(holder, balance);
-                break;
-            case "CC":
-                int code = Integer.parseInt(cmd[Command.CODE.getIndex()]);
-                for (Campus campus : Campus.values()) {
-                    if (campus.getCode() == code) {
-                        acct = new CollegeChecking(holder, balance, campus);
-                    }
-                }
-                if (acct == null)
-                    System.out.println("Invalid campus code.");
-                break;
-            case "S":
-                boolean isLoyal = Integer.parseInt(cmd[Command.CODE.getIndex()]) == 1;
-                acct = new Savings(holder, balance, isLoyal);
-                break;
-            case "MM":
+            else if (acct_CollegeChecking_OC.isSelected()) {
+                if (campus_NB.isSelected() && !campus_NB.isDisabled())
+                    acct = new CollegeChecking(holder, balance, Campus.NEW_BRUNSWICK);
+                else if (campus_Newark.isSelected() && !campus_Newark.isDisabled())
+                    acct = new CollegeChecking(holder, balance, Campus.NEWARK);
+                else if (campus_Camden.isSelected() && !campus_Camden.isDisabled())
+                    acct = new CollegeChecking(holder, balance, Campus.CAMDEN);
+                else
+                    outputText.setText("Invalid campus code.");
+            } else if (acct_Savings_OC.isSelected())
+                acct = new Savings(holder, balance, isLoyal.isSelected());
+            else if (acct_MoneyMarket_OC.isSelected()) {
                 if (balance < MIN_BALANCE_FOR_NO_FEE_IN_MONEY_MARKET) {
-                    System.out.println("Minimum of $2000 to open a Money Market account.");
-                    break;
-                }
-                acct = new MoneyMarket(holder, balance);
-                break;
-            default:
-                System.out.println("Invalid account type.");
-                break;
+                    outputText.setText("Minimum of $2000 to open a Money Market account.");
+                } else
+                    acct = new MoneyMarket(holder, balance);
+            } else
+                outputText.setText("Invalid account type.");
         }
         return acct;
     }
@@ -183,30 +193,40 @@ public class TransactionManagerController
     @FXML
     protected void onOpenButtonClick(Event event) {
         try {
-            Date dob = new Date(dob_OpenClose.toString());
-            Profile holder = new Profile(fname_OpenClose.toString(), lname_OpenClose.toString(), dob);
-            double balance = Double.parseDouble(initBal_OpenClose.toString());
-            Account acct;
-
-
-            //open an account
+            Account acct = createAccount();
+            if (acct == null) throw new NullPointerException();
+            if (acct instanceof Checking) {
+                if (database.contains((Checking) acct, true))
+                    outputText.setText(acct + " is already in the database.");
+                else if (database.open(acct))
+                    outputText.setText(acct + " opened.");
+            }
+            else if (database.contains(acct))
+                outputText.setText(acct + " is already in the database.");
+            else if (database.open(acct))
+                outputText.setText(acct + " opened.");
         }
         catch (NullPointerException e) {
-            System.out.println("Missing data for opening an account.");
+            outputText.setText(outputText.getText() + "\n" +
+                    "Missing data for opening an account or account is not valid.");
+        }
+        catch (ArrayIndexOutOfBoundsException e) {
+            outputText.setText("ArrayIndexOutOfBoundsException thrown.");
         }
         catch (NumberFormatException e) {
-            System.out.println("Not a valid amount.");
+            outputText.setText(outputText.getText() + "\n" + "Not a valid amount.");
         }
     }
 
     public void initialize()
     {
-        /*campus_NB.setDisable(true);
+        /*
+        campus_NB.setDisable(true);
         campus_Newark.setDisable(true);
         campus_Camden.setDisable(true);
 
         campus.selectedToggleProperty().addListener((observable, oldToggle, newToggle) -> {
-            if (newToggle == acct_CollegeChecking) {
+            if (newToggle == acct_CollegeChecking_OC) {
                 campus_NB.setDisable(false);
                 campus_Newark.setDisable(false);
                 campus_Camden.setDisable(false);

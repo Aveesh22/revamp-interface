@@ -45,12 +45,12 @@
                               <Label prefHeight="17.0" prefWidth="63.0" text="First Name" />
                               <Label prefHeight="17.0" prefWidth="66.0" text="Last Name" GridPane.rowIndex="1" />
                               <Label prefHeight="17.0" prefWidth="74.0" text="Date of Birth" GridPane.rowIndex="2" />
-                              <TextField fx:id="fname_OpenClose" GridPane.columnIndex="1">
+                              <TextField fx:id="fname_OC" GridPane.columnIndex="1">
                                  <GridPane.margin>
                                     <Insets />
                                  </GridPane.margin></TextField>
-                              <TextField fx:id="lname_OpenClose" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                              <DatePicker fx:id="dob_OpenClose" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                              <TextField fx:id="lname_OC" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                              <DatePicker fx:id="dob_OC" GridPane.columnIndex="1" GridPane.rowIndex="2" />
                               <Label text="Account Type" GridPane.rowIndex="4" />
                               <GridPane prefHeight="56.0" prefWidth="201.0" GridPane.columnIndex="1" GridPane.rowIndex="4">
                                 <columnConstraints>
@@ -62,13 +62,13 @@
                                   <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
                                 </rowConstraints>
                                  <children>
-                                    <RadioButton fx:id="acct_Checking" mnemonicParsing="false" text="Checking">
+                                    <RadioButton fx:id="acct_Checking_OC" mnemonicParsing="false" text="Checking">
                                        <toggleGroup>
-                                          <ToggleGroup fx:id="Account" />
+                                          <ToggleGroup fx:id="accounts_OC" />
                                        </toggleGroup></RadioButton>
-                                    <RadioButton fx:id="acct_Savings" mnemonicParsing="false" text="Savings" toggleGroup="$Account" GridPane.rowIndex="1" />
-                                    <RadioButton fx:id="acct_CollegeChecking" mnemonicParsing="false" text="College Checking" toggleGroup="$Account" GridPane.columnIndex="1" />
-                                    <RadioButton fx:id="acct_MoneyMarket" mnemonicParsing="false" prefHeight="24.0" prefWidth="107.0" text="Money Market" toggleGroup="$Account" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                                    <RadioButton fx:id="acct_Savings_OC" mnemonicParsing="false" text="Savings" toggleGroup="$accounts_OC" GridPane.rowIndex="1" />
+                                    <RadioButton fx:id="acct_CollegeChecking_OC" mnemonicParsing="false" text="College Checking" toggleGroup="$accounts_OC" GridPane.columnIndex="1" />
+                                    <RadioButton fx:id="acct_MoneyMarket_OC" mnemonicParsing="false" prefHeight="24.0" prefWidth="107.0" text="Money Market" toggleGroup="$accounts_OC" GridPane.columnIndex="1" GridPane.rowIndex="1" />
                                  </children>
                                  <GridPane.margin>
                                     <Insets bottom="5.0" top="5.0" />
@@ -107,12 +107,12 @@
                                     <RadioButton fx:id="campus_Camden" mnemonicParsing="false" text="Camden" toggleGroup="$campus" GridPane.columnIndex="1" GridPane.rowIndex="2" />
                                  </children>
                               </GridPane>
-                              <CheckBox mnemonicParsing="false" prefHeight="18.0" prefWidth="120.0" text="Loyal Customer" GridPane.columnIndex="2" GridPane.halignment="RIGHT" GridPane.rowIndex="2">
+                              <CheckBox fx:id="isLoyal" mnemonicParsing="false" prefHeight="18.0" prefWidth="120.0" text="Loyal Customer" GridPane.columnIndex="2" GridPane.halignment="RIGHT" GridPane.rowIndex="2">
                                  <GridPane.margin>
                                     <Insets left="10.0" />
                                  </GridPane.margin></CheckBox>
                               <Label text="Initial Balance" GridPane.rowIndex="5" />
-                              <TextField fx:id="initBal_OpenClose" prefHeight="25.0" GridPane.columnIndex="1" GridPane.rowIndex="5" />
+                              <TextField fx:id="initBal_OC" prefHeight="25.0" GridPane.columnIndex="1" GridPane.rowIndex="5" />
                            </children>
                         </GridPane>
                      </children>
@@ -159,14 +159,14 @@
                                     <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
                                  </rowConstraints>
                                  <children>
-                                    <RadioButton mnemonicParsing="false" text="Checking">
+                                    <RadioButton fx:id="acct_Checking_DW" mnemonicParsing="false" text="Checking">
                                        <toggleGroup>
-                                          <ToggleGroup fx:id="Account1" />
+                                          <ToggleGroup fx:id="accounts_DW" />
                                        </toggleGroup>
                                     </RadioButton>
-                                    <RadioButton mnemonicParsing="false" text="Savings" toggleGroup="$Account1" GridPane.rowIndex="1" />
-                                    <RadioButton mnemonicParsing="false" text="College Checking" toggleGroup="$Account1" GridPane.columnIndex="1" />
-                                    <RadioButton mnemonicParsing="false" prefHeight="24.0" prefWidth="107.0" text="Money Market" toggleGroup="$Account1" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                                    <RadioButton fx:id="acct_Savings_DW" mnemonicParsing="false" text="Savings" toggleGroup="$accounts_DW" GridPane.rowIndex="1" />
+                                    <RadioButton fx:id="acct_CollegeChecking_DW" mnemonicParsing="false" text="College Checking" toggleGroup="$accounts_DW" GridPane.columnIndex="1" />
+                                    <RadioButton fx:id="acct_MoneyMarket_DW" mnemonicParsing="false" prefHeight="24.0" prefWidth="107.0" text="Money Market" toggleGroup="$accounts_DW" GridPane.columnIndex="1" GridPane.rowIndex="1" />
                                  </children>
                                  <GridPane.margin>
                                     <Insets bottom="5.0" top="5.0" />
@@ -220,6 +220,6 @@
       </TabPane>
    </top>
    <bottom>
-      <TextArea editable="false" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER" />
+      <TextArea fx:id="outputText" editable="false" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER" />
    </bottom>
 </BorderPane>
