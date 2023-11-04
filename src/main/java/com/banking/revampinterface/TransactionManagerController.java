@@ -142,6 +142,7 @@ public class TransactionManagerController
 
     /**
      * Create an Account object to open and add to the database given a command
+     * @param cmd the line read in from the text file
      * @return the instantiated Account object
      */
     private Account createAccount_Open(String[] cmd) {
@@ -317,8 +318,6 @@ public class TransactionManagerController
     }
 
 
-
-
     /**
      * Opens an account with the desired account type.
      * @param event The click event
@@ -460,9 +459,12 @@ public class TransactionManagerController
      */
     @FXML
     protected void onPButtonClick(Event event) {
-        outputText.setText("*Accounts sorted by account type and profile.\n" +
-                database.printSorted() +
-                "*end of list.");
+        if (database.getNumAcct() > 0) {
+            outputText.setText("*Accounts sorted by account type and profile.\n" +
+                    database.printSorted() +
+                    "*end of list.");
+        }
+        else outputText.setText("Account Database is empty!");
     }
 
     /**
@@ -471,9 +473,12 @@ public class TransactionManagerController
      */
     @FXML
     protected void onPIButtonClick(Event event) {
+        if (database.getNumAcct() > 0) {
         outputText.setText("*list of accounts with fee and monthly interest\n" +
                 database.printFeesAndInterests() +
                 "*end of list.");
+        }
+        else outputText.setText("Account Database is empty!");
     }
 
     /**
@@ -482,9 +487,12 @@ public class TransactionManagerController
      */
     @FXML
     protected void onUBButtonClick(Event event) {
+        if (database.getNumAcct() > 0) {
         outputText.setText("*list of accounts with fees and interests applied.\n" +
                 database.printUpdatedBalances() +
                 "*end of list.");
+        }
+        else outputText.setText("Account Database is empty!");
     }
 
     /**
