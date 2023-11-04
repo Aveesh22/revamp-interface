@@ -2,12 +2,10 @@ package com.banking.revampinterface;
 
 import javafx.event.Event;
 import javafx.fxml.FXML;
-import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.stage.FileChooser;
 
 import java.io.File;
-import java.io.IOException;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.Scanner;
@@ -530,6 +528,9 @@ public class TransactionManagerController
         }
     }
 
+    /**
+     * Initialize the GUI with default values and add a listener for the toggles.
+     */
     public void initialize()
     {
         isLoyalCheck.setDisable(true);
