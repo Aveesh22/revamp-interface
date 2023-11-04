@@ -141,13 +141,13 @@
                               <Label prefHeight="17.0" prefWidth="63.0" text="First Name" />
                               <Label prefHeight="17.0" prefWidth="66.0" text="Last Name" GridPane.rowIndex="1" />
                               <Label prefHeight="17.0" prefWidth="74.0" text="Date of Birth" GridPane.rowIndex="2" />
-                              <TextField GridPane.columnIndex="1">
+                              <TextField fx:id="fname_DW" GridPane.columnIndex="1">
                                  <GridPane.margin>
                                     <Insets />
                                  </GridPane.margin>
                               </TextField>
-                              <TextField GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                              <DatePicker GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                              <TextField fx:id="lname_DW" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                              <DatePicker fx:id="dob_DW" GridPane.columnIndex="1" GridPane.rowIndex="2" />
                               <Label text="Account Type" GridPane.rowIndex="4" />
                               <GridPane prefHeight="56.0" prefWidth="201.0" GridPane.columnIndex="1" GridPane.rowIndex="4">
                                  <columnConstraints>
@@ -174,12 +174,12 @@
                               </GridPane>
                               <HBox alignment="BOTTOM_CENTER" prefHeight="42.0" prefWidth="230.0" GridPane.columnIndex="1" GridPane.rowIndex="6">
                                  <children>
-                                    <Button mnemonicParsing="false" prefHeight="26.0" prefWidth="119.0" text="Deposit">
+                                    <Button mnemonicParsing="false" onAction="#onDepositButtonClick" prefHeight="26.0" prefWidth="119.0" text="Deposit">
                                        <HBox.margin>
                                           <Insets right="5.0" />
                                        </HBox.margin>
                                     </Button>
-                                    <Button mnemonicParsing="false" prefHeight="26.0" prefWidth="126.0" text="Withdraw">
+                                    <Button mnemonicParsing="false" onAction="#onWithdrawButtonClick" prefHeight="26.0" prefWidth="126.0" text="Withdraw">
                                        <HBox.margin>
                                           <Insets left="5.0" />
                                        </HBox.margin>
@@ -187,7 +187,7 @@
                                  </children>
                               </HBox>
                               <Label text="Amount" GridPane.rowIndex="5" />
-                              <TextField prefHeight="25.0" GridPane.columnIndex="1" GridPane.rowIndex="5" />
+                              <TextField fx:id="amount_DW" prefHeight="25.0" GridPane.columnIndex="1" GridPane.rowIndex="5" />
                            </children>
                         </GridPane>
                      </children></AnchorPane>
@@ -208,7 +208,7 @@
                           </rowConstraints>
                            <children>
                               <Button mnemonicParsing="false" onAction="#onPButtonClick" prefHeight="23.0" prefWidth="175.0" text="Print All Accounts" GridPane.halignment="CENTER" />
-                              <Button mnemonicParsing="false" prefHeight="23.0" prefWidth="175.0" text="Load Accounts From File" GridPane.columnIndex="1" GridPane.halignment="CENTER" />
+                              <Button fx:id="loadAccountsBtn" mnemonicParsing="false" prefHeight="23.0" prefWidth="175.0" text="Load Accounts From File" GridPane.columnIndex="1" GridPane.halignment="CENTER" />
                               <Button mnemonicParsing="false" onAction="#onPIButtonClick" prefHeight="26.0" prefWidth="175.0" text="Print Interests and Fees" GridPane.halignment="CENTER" GridPane.rowIndex="1" />
                               <Button mnemonicParsing="false" onAction="#onUBButtonClick" prefHeight="48.0" prefWidth="175.0" text="Update Accounts with Interests and Fees" textAlignment="CENTER" wrapText="true" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="1" />
                            </children>
@@ -219,7 +219,7 @@
         </tabs>
       </TabPane>
    </top>
-   <bottom>
+   <center>
       <TextArea fx:id="outputText" editable="false" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER" />
-   </bottom>
+   </center>
 </BorderPane>
