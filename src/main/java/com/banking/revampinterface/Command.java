@@ -5,13 +5,12 @@ package com.banking.revampinterface;
  * @author Patryk Dziedzic, Aveesh Patel
  */
 public enum Command {
-    COMMAND(0),
-    ACCT(1),
-    FNAME(2),
-    LNAME(3),
-    DOB(4),
-    MONEY(5),
-    CODE(6);
+    ACCT(0),
+    FNAME(1),
+    LNAME(2),
+    DOB(3),
+    MONEY(4),
+    CODE(5);
 
     private final int index;
 

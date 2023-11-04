@@ -7,6 +7,7 @@ import javafx.scene.control.*;
 import javafx.stage.FileChooser;
 
 import java.io.File;
+import java.io.IOException;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.Scanner;
@@ -134,6 +135,54 @@ public class TransactionManagerController
                         acct = new MoneyMarket(holder, balance);
                 } else
                     outputText.setText("Invalid account type.");
+            }
+        } catch (DateTimeParseException e) {
+            outputText.setText("DOB invalid: " + dob_OC.getValue().toString() + " not a valid calendar date!");
+        }
+        return acct;
+    }
+
+    /**
+     * Create an Account object to open and add to the database given a command
+     * @return the instantiated Account object
+     */
+    private Account createAccount_Open(String[] cmd) {
+        Account acct = null;
+        Date dob = new Date(cmd[Command.DOB.getIndex()]);
+        Profile holder = new Profile(cmd[Command.FNAME.getIndex()], cmd[Command.LNAME.getIndex()], dob);
+        double balance = Double.parseDouble(cmd[Command.MONEY.getIndex()]);
+
+        try {
+            if (acctIsValid(dob, balance)) {
+                switch (cmd[Command.ACCT.getIndex()]) {
+                    case "C":
+                        acct = new Checking(holder, balance);
+                        break;
+                    case "CC":
+                        int code = Integer.parseInt(cmd[Command.CODE.getIndex()]);
+                        for (Campus campus : Campus.values()) {
+                            if (campus.getCode() == code) {
+                                acct = new CollegeChecking(holder, balance, campus);
+                            }
+                        }
+                        if (acct == null)
+                            outputText.setText("Invalid campus code.");
+                        break;
+                    case "S":
+                        boolean isLoyal = Integer.parseInt(cmd[Command.CODE.getIndex()]) == 1;
+                        acct = new Savings(holder, balance, isLoyal);
+                        break;
+                    case "MM":
+                        if (balance < MIN_BALANCE_FOR_NO_FEE_IN_MONEY_MARKET) {
+                            outputText.setText("Minimum of $2000 to open a Money Market account.");
+                            break;
+                        }
+                        acct = new MoneyMarket(holder, balance);
+                        break;
+                    default:
+                        outputText.setText("Invalid account type.");
+                        break;
+                }
             }
         } catch (DateTimeParseException e) {
             outputText.setText("DOB invalid: " + dob_OC.getValue().toString() + " not a valid calendar date!");
@@ -447,9 +496,38 @@ public class TransactionManagerController
     @FXML
     protected void onLoadAccountsButtonClick(Event event) {
         FileChooser fileChooser = new FileChooser();
-        //File file = fileChooser.showOpenDialog();
-        //Scanner scanner = new Scanner(file);
-        outputText.setText("Accounts loaded.");
+        try {
+            File file = fileChooser.showOpenDialog(loadAccountsBtn.getScene().getWindow());
+            Scanner scanner = new Scanner(file);
+            String currLine;
+            while (scanner.hasNextLine()) {
+                currLine = scanner.nextLine();
+                String[] cmd = currLine.split(",");
+                if (cmd.length > 1) {
+                    Account acct = createAccount_Open(cmd);
+                    if (acct == null) throw new NullPointerException();
+                    if (acct instanceof Checking) {
+                        if (database.contains((Checking) acct, true))
+                            outputText.setText(acct + " is already in the database.");
+                        else if (database.open(acct))
+                            outputText.setText(acct + " opened.");
+                    }
+                    else if (database.contains(acct))
+                        outputText.setText(acct + " is already in the database.");
+                    else if (database.open(acct))
+                        outputText.setText(acct + " opened.");
+                }
+            }
+            outputText.setText("Accounts loaded.");
+        } catch (NullPointerException e) {
+            outputText.setText(outputText.getText() + "\n" + "Account is not valid.");
+        } catch (ArrayIndexOutOfBoundsException e) {
+            outputText.setText("ArrayIndexOutOfBoundsException thrown.");
+        } catch (NumberFormatException e) {
+            outputText.setText(outputText.getText() + "\n" + "Not a valid amount.");
+        } catch (Exception e) {
+            outputText.setText("Exception thrown: " + e.getMessage());
+        }
     }
 
     public void initialize()
