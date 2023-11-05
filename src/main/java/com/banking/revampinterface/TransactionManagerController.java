@@ -11,7 +11,8 @@ import java.time.format.DateTimeParseException;
 import java.util.Scanner;
 
 /**
- * This class defines the Controller for the Transaction Manager
+ * This class defines the Transaction Manager Controller in the MVC design pattern
+ * for the bank account interface
  * @author Aveesh Patel, Patryk Dziedzic
  */
 public class TransactionManagerController
@@ -150,7 +151,6 @@ public class TransactionManagerController
         Date dob = new Date(cmd[Command.DOB.getIndex()]);
         Profile holder = new Profile(cmd[Command.FNAME.getIndex()], cmd[Command.LNAME.getIndex()], dob);
         double balance = Double.parseDouble(cmd[Command.MONEY.getIndex()]);
-
         try {
             if (acctIsValid(dob, balance)) {
                 switch (cmd[Command.ACCT.getIndex()]) {
@@ -190,7 +190,8 @@ public class TransactionManagerController
     }
 
     /**
-     * Create an Account object with a Profile and default values to search for to close
+     * Create an Account object by generating an Account from the GUI values
+     * for searching in the Account Database and closing it
      * @return the instantiated Account object
      */
     private Account createAccount_Close()
@@ -319,7 +320,7 @@ public class TransactionManagerController
 
 
     /**
-     * Opens an account with the desired account type.
+     * Opens an account with the desired account type and parameters from the GUI
      * @param event The click event
      */
     @FXML
