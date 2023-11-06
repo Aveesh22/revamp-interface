@@ -327,20 +327,17 @@ public class TransactionManagerController
     protected void onOpenButtonClick(Event event) {
         try {
             Account acct = createAccount_Open();
-            if (acct == null) throw new NullPointerException();
-            if (acct instanceof Checking) {
-                if (database.contains((Checking) acct, true))
+            if (acct != null) {
+                if (acct instanceof Checking) {
+                    if (database.contains((Checking) acct, true))
+                        outputText.setText(acct + " is already in the database.");
+                    else if (database.open(acct))
+                        outputText.setText(acct + " opened.");
+                } else if (database.contains(acct))
                     outputText.setText(acct + " is already in the database.");
                 else if (database.open(acct))
                     outputText.setText(acct + " opened.");
             }
-            else if (database.contains(acct))
-                outputText.setText(acct + " is already in the database.");
-            else if (database.open(acct))
-                outputText.setText(acct + " opened.");
-        }
-        catch (NullPointerException e) {
-            outputText.setText(outputText.getText() + "\n" + "Missing data for opening an account.");
         }
         catch (ArrayIndexOutOfBoundsException e) {
             outputText.setText("ArrayIndexOutOfBoundsException thrown.");
@@ -358,16 +355,14 @@ public class TransactionManagerController
     protected void onCloseButtonClick(Event event) {
         try {
             Account acct = createAccount_Close();
-            if (acct == null) throw new NullPointerException();
-            if (!database.contains(acct))
-                outputText.setText(acct + " is not in the database.");
-            else {
-                if (database.close(acct))
-                    outputText.setText(acct + " has been closed.");
+            if (acct != null) {
+                if (!database.contains(acct))
+                    outputText.setText(acct + " is not in the database.");
+                else {
+                    if (database.close(acct))
+                        outputText.setText(acct + " has been closed.");
+                }
             }
-        }
-        catch (NullPointerException e) {
-            outputText.setText(outputText.getText() + "\n" + "Missing data for closing an account.");
         }
         catch (ArrayIndexOutOfBoundsException e) {
             outputText.setText("ArrayIndexOutOfBoundsException thrown.");
