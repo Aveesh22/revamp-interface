@@ -133,7 +133,7 @@ public class TransactionManagerController
                     } else
                         acct = new MoneyMarket(holder, balance);
                 } else
-                    outputText.setText("Invalid account type.");
+                    outputText.setText("Missing data for opening an account.");
             }
         } catch (DateTimeParseException e) {
             outputText.setText("DOB invalid: " + dob_OC.getValue().toString() + " not a valid calendar date!");
@@ -179,7 +179,7 @@ public class TransactionManagerController
                         acct = new MoneyMarket(holder, balance);
                         break;
                     default:
-                        outputText.setText("Invalid account type.");
+                        outputText.setText("Missing data for opening an account.");
                         break;
                 }
             }
@@ -210,7 +210,7 @@ public class TransactionManagerController
             else if (acct_MoneyMarket_OC.isSelected())
                 acct = new MoneyMarket(holder);
             else
-                outputText.setText("Invalid account type.");
+                outputText.setText("Missing data for closing an account.");
         } catch (DateTimeParseException e) {
             outputText.setText("DOB invalid: " + dob_OC.getValue().toString() + " not a valid calendar date!");
         }
@@ -340,7 +340,7 @@ public class TransactionManagerController
                 outputText.setText(acct + " opened.");
         }
         catch (NullPointerException e) {
-            outputText.setText(outputText.getText() + "\n" + "Account is not valid.");
+            outputText.setText(outputText.getText() + "\n" + "Missing data for opening an account.");
         }
         catch (ArrayIndexOutOfBoundsException e) {
             outputText.setText("ArrayIndexOutOfBoundsException thrown.");
@@ -367,7 +367,7 @@ public class TransactionManagerController
             }
         }
         catch (NullPointerException e) {
-            outputText.setText(outputText.getText() + "\n" + "Account is not valid.");
+            outputText.setText(outputText.getText() + "\n" + "Missing data for closing an account.");
         }
         catch (ArrayIndexOutOfBoundsException e) {
             outputText.setText("ArrayIndexOutOfBoundsException thrown.");
