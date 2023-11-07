@@ -343,7 +343,7 @@ public class TransactionManagerController
             outputText.setText("ArrayIndexOutOfBoundsException thrown.");
         }
         catch (NumberFormatException e) {
-            outputText.setText(outputText.getText() + "\n" + "Not a valid amount.");
+            outputText.setText("Not a valid amount.");
         }
     }
 
@@ -368,7 +368,7 @@ public class TransactionManagerController
             outputText.setText("ArrayIndexOutOfBoundsException thrown.");
         }
         catch (NumberFormatException e) {
-            outputText.setText(outputText.getText() + "\n" + "Not a valid amount.");
+            outputText.setText("Not a valid amount.");
         }
     }
 
@@ -401,22 +401,20 @@ public class TransactionManagerController
     protected void onDepositButtonClick(Event event) {
         try {
             Account acct = createAccount_DW();
-            if (acct == null) throw new NullPointerException();
-            if (!database.contains(acct))
-                outputText.setText(acct + " is not in the database.");
-            else {
-                database.deposit(acct);
-                outputText.setText(acct + " Deposit - balance updated.");
+            if (acct != null) {
+                if (!database.contains(acct))
+                    outputText.setText(acct + " is not in the database.");
+                else {
+                    database.deposit(acct);
+                    outputText.setText(acct + " Deposit - balance updated.");
+                }
             }
-        }
-        catch (NullPointerException e) {
-            outputText.setText(outputText.getText() + "\n" + "Account is not valid.");
         }
         catch (ArrayIndexOutOfBoundsException e) {
             outputText.setText("ArrayIndexOutOfBoundsException thrown.");
         }
         catch (NumberFormatException e) {
-            outputText.setText(outputText.getText() + "\n" + "Not a valid amount.");
+            outputText.setText("Not a valid amount.");
         }
     }
 
@@ -428,24 +426,22 @@ public class TransactionManagerController
     protected void onWithdrawButtonClick(Event event) {
         try {
             Account acct = createAccount_DW();
-            if (acct == null) throw new NullPointerException();
-            if (!database.contains(acct))
-                outputText.setText(acct + " is not in the database.");
-            else {
-                if (database.withdraw(acct))
-                    outputText.setText(acct + " Withdraw - balance updated.");
-                else
-                    outputText.setText(acct + " Withdraw - insufficient fund.");
+            if (acct != null) {
+                if (!database.contains(acct))
+                    outputText.setText(acct + " is not in the database.");
+                else {
+                    if (database.withdraw(acct))
+                        outputText.setText(acct + " Withdraw - balance updated.");
+                    else
+                        outputText.setText(acct + " Withdraw - insufficient fund.");
+                }
             }
-        }
-        catch (NullPointerException e) {
-            outputText.setText(outputText.getText() + "\n" + "Account is not valid.");
         }
         catch (ArrayIndexOutOfBoundsException e) {
             outputText.setText("ArrayIndexOutOfBoundsException thrown.");
         }
         catch (NumberFormatException e) {
-            outputText.setText(outputText.getText() + "\n" + "Not a valid amount.");
+            outputText.setText("Not a valid amount.");
         }
     }
 
